@@ -1,0 +1,52 @@
+{
+    "Args": {
+        "Description": "",
+        "Name": "",
+        "Settable": null,
+        "Value": null
+    },
+    "Description": "A local-mapping plugin for Docker",
+    "Documentation": "https://docs.docker.com/engine/extend/plugins/",
+    "Entrypoint": [
+        "/local-mapping"
+    ],
+    "Env": [
+        {
+            "Description": "Whether record debug logs or not",
+            "Name": "DEBUG",
+            "Settable": [
+                "value"
+            ],
+            "Value": "0"
+        }
+    ],
+    "Interface": {
+        "Socket": "local-mapping.sock",
+        "Types": [
+            "docker.volumedriver/1.0"
+        ]
+    },
+    "Linux": {
+        "Capabilities": null,
+        "AllowAllDevices": false,
+        "Devices": null
+    },
+    "Mounts": [{
+        "destination": "/mnt/state",
+        "options": [
+            "rbind"
+        ],
+        "name": "state",
+        "source": "/var/lib/docker/plugins",
+        "settable": [
+            "source"
+        ],
+        "type": "bind"
+    }],
+    "Network": {
+        "Type": ""
+    },
+    "PropagatedMount": null,
+    "User": {},
+    "Workdir": ""
+}
