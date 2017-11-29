@@ -10,9 +10,10 @@ import (
 const socketAddress = "/run/docker/plugins/local-mapping.sock"
 
 const stateDir = "/mnt/state/"
+const rootMountPoint = "/mnt/root/"
 
 func main() {
-	driver, _ := newLocalPersistDriver(stateDir)
+	driver, _ := newLocalPersistDriver(rootMountPoint, stateDir)
 
 	handler := volume.NewHandler(driver)
 	logrus.Infof("Listening on %s", socketAddress)

@@ -12,10 +12,12 @@ var (
 	defaultTestStateDir   = "/tmp"
 	defaultTestName       = "test-volume"
 	defaultTestMountpoint = "/tmp/data/local-mapping-test"
+	// Test, the root mountpoint is "/"
+	defaultTestRootMountPoint = "/"
 )
 
 func TestCreate(t *testing.T) {
-	driver, _ := newLocalPersistDriver(defaultTestStateDir)
+	driver, _ := newLocalPersistDriver(defaultTestRootMountPoint, defaultTestStateDir)
 
 	defaultCreateHelper(driver, t)
 
@@ -44,7 +46,7 @@ func TestCreate(t *testing.T) {
 }
 
 func TestGet(t *testing.T) {
-	driver, _ := newLocalPersistDriver(defaultTestStateDir)
+	driver, _ := newLocalPersistDriver(defaultTestRootMountPoint, defaultTestStateDir)
 
 	defaultCreateHelper(driver, t)
 
@@ -57,7 +59,7 @@ func TestGet(t *testing.T) {
 }
 
 func TestList(t *testing.T) {
-	driver, _ := newLocalPersistDriver(defaultTestStateDir)
+	driver, _ := newLocalPersistDriver(defaultTestRootMountPoint, defaultTestStateDir)
 
 	name := defaultTestName + "2"
 	mountpoint := defaultTestMountpoint + "2"
@@ -85,7 +87,7 @@ func TestList(t *testing.T) {
 }
 
 func TestMount(t *testing.T) {
-	driver, _ := newLocalPersistDriver(defaultTestStateDir)
+	driver, _ := newLocalPersistDriver(defaultTestRootMountPoint, defaultTestStateDir)
 
 	defaultCreateHelper(driver, t)
 

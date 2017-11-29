@@ -18,16 +18,17 @@ const stateFile = "local-mapping.json"
 type localPersistDriver struct {
 	mutex *sync.Mutex
 
-	name      string
-	volumes   map[string]string
-	statePath string
+	name           string
+	volumes        map[string]string
+	rootMountPoint string
+	statePath      string
 }
 
 type saveData struct {
 	State map[string]string `json:"state"`
 }
 
-func newLocalPersistDriver(stateDir string) (*localPersistDriver, error) {
+func newLocalPersistDriver(rootMountPoint string, stateDir string) (*localPersistDriver, error) {
 	debug := os.Getenv("DEBUG")
 	if ok, _ := strconv.ParseBool(debug); ok {
 		logrus.SetLevel(logrus.DebugLevel)
@@ -35,13 +36,15 @@ func newLocalPersistDriver(stateDir string) (*localPersistDriver, error) {
 	logrus.WithField("stateDir", stateDir).Debug("Driver init ...")
 
 	driver := &localPersistDriver{
-		volumes:   map[string]string{},
-		mutex:     &sync.Mutex{},
-		name:      "local-mapping",
-		statePath: path.Join(stateDir, stateFile),
+		volumes:        map[string]string{},
+		mutex:          &sync.Mutex{},
+		name:           "local-mapping",
+		rootMountPoint: rootMountPoint,
+		statePath:      path.Join(stateDir, stateFile),
 	}
 
 	os.Mkdir(stateDir, 0700)
+	os.MkdirAll(rootMountPoint, 0755)
 
 	driver.volumes, _ = driver.findExistingVolumesFromStateFile()
 
@@ -56,6 +59,9 @@ func (driver *localPersistDriver) Create(req *volume.CreateRequest) error {
 	if mountpoint == "" {
 		return logError("The `mountpoint` option is required")
 	}
+
+	// transform to container path
+	mountpoint = path.Join(driver.rootMountPoint, mountpoint)
 
 	driver.mutex.Lock()
 	defer driver.mutex.Unlock()
@@ -126,25 +132,25 @@ func (driver *localPersistDriver) Remove(req *volume.RemoveRequest) error {
 func (driver *localPersistDriver) Path(req *volume.PathRequest) (*volume.PathResponse, error) {
 	logrus.WithField("args", req).Debug("Path Called")
 
-	mountPoint, err := driver.volumes[req.Name]
+	mountpoint, err := driver.volumes[req.Name]
 	if !err {
 		return &volume.PathResponse{}, logError("Volume %s not found", req.Name)
 	}
 
-	logrus.WithField("mountPoint", mountPoint).Debug("Path success")
-	return &volume.PathResponse{Mountpoint: mountPoint}, nil
+	logrus.WithField("mountpoint", mountpoint).Debug("Path success")
+	return &volume.PathResponse{Mountpoint: mountpoint}, nil
 }
 
 func (driver *localPersistDriver) Mount(req *volume.MountRequest) (*volume.MountResponse, error) {
 	logrus.WithField("args", req).Debug("Mount Called")
 
-	mountPoint, err := driver.volumes[req.Name]
+	mountpoint, err := driver.volumes[req.Name]
 	if !err {
 		return &volume.MountResponse{}, logError("Volume %s not found", req.Name)
 	}
 
-	logrus.WithField("mountPoint", mountPoint).Debug("Mount success")
-	return &volume.MountResponse{Mountpoint: mountPoint}, nil
+	logrus.WithField("mountpoint", mountpoint).Debug("Mount success")
+	return &volume.MountResponse{Mountpoint: mountpoint}, nil
 }
 
 func (driver *localPersistDriver) Unmount(req *volume.UnmountRequest) error {

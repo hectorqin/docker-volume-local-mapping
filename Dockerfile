@@ -7,6 +7,6 @@ CMD ["/go/bin/local-mapping"]
 
 FROM alpine
 RUN apk update \
-    && mkdir -p /run/docker/plugins
-COPY --from=builder /go/bin/local-mapping .
-CMD ["local-mapping"]
+    && mkdir -p /run/docker/plugins /mnt/root
+COPY --from=builder /go/bin/local-mapping /usr/bin/local-mapping
+CMD ["/usr/bin/local-mapping"]

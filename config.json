@@ -8,7 +8,7 @@
     "Description": "A local-mapping plugin for Docker",
     "Documentation": "https://docs.docker.com/engine/extend/plugins/",
     "Entrypoint": [
-        "/local-mapping"
+        "/usr/bin/local-mapping"
     ],
     "Env": [
         {
@@ -32,6 +32,17 @@
         "Devices": null
     },
     "Mounts": [{
+        "destination": "/mnt/root",
+        "options": [
+            "rbind"
+        ],
+        "name": "root",
+        "source": "/data",
+        "settable": [
+            "source"
+        ],
+        "type": "bind"
+    },{
         "destination": "/mnt/state",
         "options": [
             "rbind"
@@ -46,7 +57,7 @@
     "Network": {
         "Type": ""
     },
-    "PropagatedMount": null,
+    "PropagatedMount": "/mnt/root",
     "User": {},
     "Workdir": ""
 }
