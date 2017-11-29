@@ -16,6 +16,10 @@ docker plugin install hectorqin/local-mapping DEBUG=1
 
 # or to change where plugin state is stored
 docker plugin install hectorqin/local-mapping state.source=<any_folder>
+
+# or to change where local folder is stored
+# when create volme, make sure the path is relative to the root.source,  the real path is root.source + mountpoint(args)
+docker plugin install hectorqin/local-mapping root.source=<any_folder>
 ```
 
 2 - Create a volume
