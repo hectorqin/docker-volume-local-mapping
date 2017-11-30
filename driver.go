@@ -89,7 +89,7 @@ func (driver *localPersistDriver) List() (*volume.ListResponse, error) {
 	logrus.Debug("List called")
 
 	var volumes []*volume.Volume
-	for name, _ := range driver.volumes {
+	for name := range driver.volumes {
 		volumes = append(volumes, driver.volume(name))
 	}
 
