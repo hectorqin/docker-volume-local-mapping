@@ -1,7 +1,7 @@
 # Docker volume plugin for local-mapping
 
 This plugin allows you to map local folder to volume.
-
+[![TravisCI](https://travis-ci.org/hectorqin/docker-volume-local-mapping.svg)](https://travis-ci.org/hectorqin/docker-volume-local-mapping)
 
 ## Usage
 

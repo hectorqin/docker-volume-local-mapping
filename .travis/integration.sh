@@ -29,7 +29,7 @@ sudo docker plugin ls
 sudo docker volume create -d hectorqin/local-mapping:$TAG -o mountpoint=/tmp localvolume
 # sudo cat /var/lib/docker/plugins/local-mapping.json
 # check the state
-sudo grep -Fxq "/mnt/root/tmp" /var/lib/docker/plugins/local-mapping.json
+sudo grep -Fxq "/mnt/root/localvolume" /var/lib/docker/plugins/local-mapping.json
 # write the volume in container
 sudo docker run --rm -v localvolume:/write busybox sh -c "echo hello > /write/world"
 # check the volume on host
@@ -48,7 +48,7 @@ sudo docker plugin enable hectorqin/local-mapping:$TAG
 sudo docker volume create -d hectorqin/local-mapping:$TAG -o mountpoint=/tmp localvolume
 # sudo cat /tmp/local-mapping.json
 # check the state
-sudo grep -Fxq "/mnt/root/tmp" /tmp/local-mapping.json
+sudo grep -Fxq "/mnt/root/localvolume" /tmp/local-mapping.json
 # write the volume in container
 sudo docker run --rm -v localvolume:/write busybox sh -c "echo hello > /write/world"
 # check the volume on host
@@ -67,7 +67,7 @@ sudo docker plugin enable hectorqin/local-mapping:$TAG
 sudo docker volume create -d hectorqin/local-mapping:$TAG -o mountpoint=/tmp localvolume
 # sudo cat /var/lib/docker/plugins/local-mapping.json
 # check the state
-sudo grep -Fxq "/mnt/root/tmp" /var/lib/docker/plugins/local-mapping.json
+sudo grep -Fxq "/mnt/root/localvolume" /var/lib/docker/plugins/local-mapping.json
 # write the volume in container
 sudo docker run --rm -v localvolume:/write busybox sh -c "echo hello > /write/world"
 # check the volume on host
