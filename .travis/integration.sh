@@ -15,7 +15,7 @@ TAG=test
 sudo docker pull busybox
 
 # default root source is /data
-mkdir /data
+sudo mkdir /data
 
 # make the plugin
 sudo PLUGIN_TAG=$TAG make
